@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Video Scheduler</title>
+  <!-- Google Fonts: Outfit for titles, Inter for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons (CDN) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <i data-lucide="video" class="brand-icon"></i>
+        </div>
+        <span class="brand-name">TokScheduler</span>
+      </div>
+      
+      <nav class="nav-menu">
+        <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#schedule" class="nav-item" data-tab="schedule">
+          <i data-lucide="plus-circle"></i>
+          <span>Schedule Post</span>
+        </a>
+        <a href="#settings" class="nav-item" data-tab="settings">
+          <i data-lucide="settings"></i>
+          <span>Developer Keys</span>
+        </a>
+      </nav>
+
+      <!-- Account Connection Status -->
+      <div class="account-widget" id="accountWidget">
+        <div class="widget-unconnected">
+          <p>TikTok Account</p>
+          <span class="status-badge status-disconnected">Disconnected</span>
+        </div>
+        <div class="widget-connected hidden">
+          <img src="" alt="Avatar" class="widget-avatar" id="widgetAvatar">
+          <div class="widget-info">
+            <h4 id="widgetName">Creator</h4>
+            <span class="status-badge status-connected">Connected</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top header bar -->
+      <header class="top-bar">
+        <div class="page-title">
+          <h1 id="pageTitleText">Dashboard</h1>
+          <p id="pageSubtitleText">Overview of your TikTok posts and schedule status.</p>
+        </div>
+        <div class="connection-status-pill" id="headerConnectionPill">
+          <div class="pulse-dot red"></div>
+          <span>Not Connected</span>
+        </div>
+      </header>
+
+      <!-- Toast Notification -->
+      <div id="toast" class="toast hidden">
+        <i data-lucide="info" id="toastIcon"></i>
+        <span id="toastMessage">Message</span>
+      </div>
+
+      <!-- Tab Content: Dashboard -->
+      <section id="tab-dashboard" class="tab-content active">
+        <!-- Stats Row -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper blue">
+              <i data-lucide="calendar"></i>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Scheduled Posts</span>
+              <h3 class="stat-value" id="statScheduled">0</h3>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon-wrapper green">
+              <i data-lucide="check-circle2"></i>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Published</span>
+              <h3 class="stat-value" id="statPublished">0</h3>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper yellow">
+              <i data-lucide="loader"></i>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Processing</span>
+              <h3 class="stat-value" id="statProcessing">0</h3>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper red">
+              <i data-lucide="alert-circle"></i>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Failed</span>
+              <h3 class="stat-value" id="statFailed">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main section layout -->
+        <div class="content-layout">
+          <!-- Queue Panel -->
+          <div class="panel queue-panel">
+            <div class="panel-header">
+              <h2>Publishing Queue</h2>
+              <button class="btn btn-secondary btn-icon-only" id="btnRefreshQueue" title="Refresh Queue">
+                <i data-lucide="refresh-cw"></i>
+              </button>
+            </div>
+            <div class="queue-list" id="queueList">
+              <!-- Dynamically populated -->
+              <div class="empty-state">
+                <i data-lucide="inbox"></i>
+                <p>No posts in queue. Click "Schedule Post" to queue your first video.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick account details panel -->
+          <div class="panel account-panel" id="creatorPanel">
+            <div class="panel-header">
+              <h2>Account Profile</h2>
+            </div>
+            <div class="profile-card-unconnected" id="profileUnconnected">
+              <i data-lucide="shield-alert" class="alert-icon"></i>
+              <h3>No TikTok Account Linked</h3>
+              <p>To start publishing videos directly to your feed, you must first input your API keys and connect your TikTok account.</p>
+              <button class="btn btn-primary" id="btnGoToSettings">Configure Keys</button>
+            </div>
+            <div class="profile-card-connected hidden" id="profileConnected">
+              <div class="profile-header">
+                <img src="" alt="Avatar" class="profile-avatar" id="creatorAvatar">
+                <div class="profile-names">
+                  <h3 id="creatorNickname">Nickname</h3>
+                  <p id="creatorUsername">@username</p>
+                </div>
+              </div>
+              <div class="profile-details-list">
+                <div class="profile-detail-item">
+                  <span class="label">Max Duration</span>
+                  <span class="value" id="creatorMaxDuration">N/A</span>
+                </div>
+                <div class="profile-detail-item">
+                  <span class="label">Allowed Privacy Levels</span>
+                  <span class="value" id="creatorPrivacyLevels">N/A</span>
+                </div>
+                <div class="profile-detail-item">
+                  <span class="label">Comments Disabled by default</span>
+                  <span class="value" id="creatorCommentsDefault">No</span>
+                </div>
+              </div>
+              <button class="btn btn-danger" id="btnDisconnectAccount">
+                <i data-lucide="log-out"></i>
+                <span>Disconnect Account</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab Content: Schedule Post -->
+      <section id="tab-schedule" class="tab-content">
+        <div class="form-container">
+          <div class="panel form-panel">
+            <div class="panel-header">
+              <h2>Post Details</h2>
+            </div>
+            
+            <form id="scheduleForm">
+              <!-- Video File Upload Area -->
+              <div class="form-group">
+                <label>Video File <span class="required">*</span></label>
+                <div class="upload-dropzone" id="dropzone">
+                  <input type="file" id="videoFileInput" accept="video/mp4" class="hidden">
+                  <div class="dropzone-prompt">
+                    <i data-lucide="upload-cloud" class="upload-icon"></i>
+                    <p class="dropzone-title">Click to upload or drag & drop</p>
+                    <p class="dropzone-subtitle">MP4 format (Max 500MB)</p>
+                  </div>
+                  <div class="dropzone-file hidden" id="dropzoneFile">
+                    <i data-lucide="file-video" class="file-icon"></i>
+                    <div class="file-details">
+                      <span class="file-name" id="selectedFileName">filename.mp4</span>
+                      <span class="file-size" id="selectedFileSize">0 MB</span>
+                    </div>
+                    <button type="button" class="btn-clear-file" id="btnClearFile">
+                      <i data-lucide="x"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Caption -->
+              <div class="form-group">
+                <label for="postCaption">Caption / Description <span class="required">*</span></label>
+                <div class="caption-wrapper">
+                  <textarea id="postCaption" rows="4" placeholder="Share what's in your video! Include #hashtags and @mentions..." maxlength="2200"></textarea>
+                  <div class="caption-counter">
+                    <span id="charCount">0</span>/2200
+                  </div>
+                </div>
+                <div class="hashtag-helpers">
+                  <span class="hashtag-chip" onclick="addHashtag('#fyp')">#fyp</span>
+                  <span class="hashtag-chip" onclick="addHashtag('#foryou')">#foryou</span>
+                  <span class="hashtag-chip" onclick="addHashtag('#trending')">#trending</span>
+                  <span class="hashtag-chip" onclick="addHashtag('#viral')">#viral</span>
+                  <span class="hashtag-chip" onclick="addHashtag('#shorts')">#shorts</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <!-- Privacy Level -->
+                <div class="form-group">
+                  <label for="postPrivacy">Privacy Setting</label>
+                  <select id="postPrivacy">
+                    <option value="SELF_ONLY">Private (Only me)</option>
+                    <option value="MUTUAL_FOLLOW_FRIENDS">Friends (Mutual followers)</option>
+                    <option value="PUBLIC_TO_EVERYONE" selected>Public (Everyone)</option>
+                  </select>
+                  <small class="help-text">Until your developer app is audited by TikTok, postings default to Private.</small>
+                </div>
+
+                <!-- Scheduled Time -->
+                <div class="form-group">
+                  <label for="postScheduledTime">Scheduled Release <span class="required">*</span></label>
+                  <input type="datetime-local" id="postScheduledTime" required>
+                  <div class="quick-times">
+                    <button type="button" class="btn-quick-time" onclick="setQuickTime(5)">+5m</button>
+                    <button type="button" class="btn-quick-time" onclick="setQuickTime(60)">+1h</button>
+                    <button type="button" class="btn-quick-time" onclick="setQuickTime(1440)">+1d</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-submit" id="btnSubmitPost">
+                  <i data-lucide="calendar"></i>
+                  <span>Schedule Post</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Posting constraints and tips panel -->
+          <div class="panel info-panel">
+            <div class="panel-header">
+              <h2>Upload Guidelines</h2>
+            </div>
+            <div class="guideline-list">
+              <div class="guideline-item">
+                <i data-lucide="video"></i>
+                <div>
+                  <h4>Video Format</h4>
+                  <p>MP4 file format (H.264 codec recommended). Max file size is 500MB.</p>
+                </div>
+              </div>
+              <div class="guideline-item">
+                <i data-lucide="aspect-ratio"></i>
+                <div>
+                  <h4>Aspect Ratio & Resolution</h4>
+                  <p>Vertical layout (9:16 aspect ratio) is highly recommended. Resolution should be at least 720x1280.</p>
+                </div>
+              </div>
+              <div class="guideline-item">
+                <i data-lucide="clock"></i>
+                <div>
+                  <h4>Scheduled Posting</h4>
+                  <p>Posts will remain queued on this server. Please ensure the computer hosting this script is running at the scheduled time.</p>
+                </div>
+              </div>
+              <div class="guideline-item">
+                <i data-lucide="shield-check"></i>
+                <div>
+                  <h4>TikTok Sandbox</h4>
+                  <p>If your developer app is in Sandbox mode, you can only publish to the developer account, and the video's default status will be Private.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab Content: Settings -->
+      <section id="tab-settings" class="tab-content">
+        <div class="form-container">
+          <div class="panel form-panel">
+            <div class="panel-header">
+              <h2>Developer Configuration</h2>
+            </div>
+            
+            <form id="settingsForm">
+              <div class="form-group">
+                <label for="clientKey">Client Key <span class="required">*</span></label>
+                <input type="text" id="clientKey" placeholder="e.g. awxxxxxxxxxxxxxx" required>
+              </div>
+
+              <div class="form-group">
+                <label for="clientSecret">Client Secret <span class="required">*</span></label>
+                <input type="password" id="clientSecret" placeholder="••••••••••••••••••••••••••••••••" required>
+              </div>
+
+              <div class="form-group">
+                <label for="redirectUri">Redirect URI <span class="required">*</span></label>
+                <input type="text" id="redirectUri" value="http://localhost:3000/callback" required>
+                <small class="help-text">Must exactly match the Redirect URI configured in the TikTok Developer Center.</small>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="btnSaveConfig">
+                  <i data-lucide="save"></i>
+                  <span>Save Configuration</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Steps for TikTok Dev App creation -->
+          <div class="panel info-panel">
+            <div class="panel-header">
+              <h2>Setup Instructions</h2>
+            </div>
+            <ol class="setup-steps">
+              <li>
+                <h4>Register Developer Account</h4>
+                <p>Go to <a href="https://developers.tiktok.com/" target="_blank">TikTok for Developers</a> and create an account.</p>
+              </li>
+              <li>
+                <h4>Create Developer App</h4>
+                <p>Register a new application. Choose **Web App** as platform type.</p>
+              </li>
+              <li>
+                <h4>Request Scope Access</h4>
+                <p>In App settings, request access to the **Content Posting API**. Specifically ensure the `video.publish` scope is requested.</p>
+              </li>
+              <li>
+                <h4>Set Redirect URI</h4>
+                <p>Under the App's configuration settings, register: `http://localhost:3000/callback` in the **Redirect URI** list.</p>
+              </li>
+              <li>
+                <h4>Authenticate Account</h4>
+                <p>Once keys are saved above, click the **Connect TikTok Account** button that appears on the sidebar or dashboard to complete OAuth consent.</p>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="panel connection-panel hidden" id="connectionSettingsPanel">
+          <div class="panel-header">
+            <h2>Account Connection</h2>
+          </div>
+          <div class="auth-box">
+            <div class="auth-status-indicator">
+              <i data-lucide="user-check" class="auth-success-icon hidden" id="authSuccessIcon"></i>
+              <i data-lucide="user-x" class="auth-fail-icon" id="authFailIcon"></i>
+              <div class="auth-status-text">
+                <h3 id="authStatusTitle">Not Connected</h3>
+                <p id="authStatusDesc">Connect your TikTok account to start automating video publishing.</p>
+              </div>
+            </div>
+            <div class="auth-actions">
+              <button class="btn btn-primary btn-large" id="btnConnectTikTok">
+                <i data-lucide="link"></i>
+                <span>Connect TikTok Account</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
