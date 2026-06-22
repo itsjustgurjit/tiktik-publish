@@ -97,6 +97,37 @@ TikTok's Content Posting API expects chunked streaming for uploads.
 
 ---
 
+## Deploying to Render
+
+You can deploy this application on [Render](https://render.com/) to keep the scheduling queue running 24/7 in the cloud.
+
+### 1. Configure Settings & Persistent Disk
+Render web services use an ephemeral disk by default (files are wiped when the app restarts or redeploys). To prevent losing your authorization tokens and queued video uploads, you must mount a persistent disk volume:
+
+1. Create a new **Web Service** on Render and link your project repository.
+2. Render will automatically detect the settings from `package.json` and autofill:
+   - **Runtime**: `Node`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+3. Go to the **Disks** settings tab for your web service on Render:
+   - Click **Add Disk**.
+   - Set **Name** to `data` (or similar).
+   - Set **Mount Path** to `/data`.
+   - Set **Size** depending on your video storage needs (e.g., `1 GB` or higher).
+4. Go to the **Environment** settings tab (Environment Variables):
+   - Add a variable with Key `DATA_DIR` and Value `/data`. (This directs the application to store `config.json`, `posts.json`, and the `uploads/` folder on your mounted persistent disk instead of the ephemeral disk).
+
+### 2. Update TikTok Developer Portal
+1. Note your deployed Web Service URL (e.g., `https://your-app-name.onrender.com`).
+2. Log in to your [TikTok for Developers](https://developers.tiktok.com/) portal.
+3. Update the **Redirect URI** list in your App settings to include:
+   ```text
+   https://your-app-name.onrender.com/callback
+   ```
+4. Access your deployed Render URL, navigate to the **Developer Keys** tab, update the **Redirect URI** field to `https://your-app-name.onrender.com/callback` and click **Save Configuration**.
+
+---
+
 ## Troubleshooting
 
 - **Permissions Error (Private Video)**: If your TikTok Developer Application is in sandbox/development mode, posts will be visible **only to you** (`SELF_ONLY`) on TikTok. You must submit your developer app for official review/audit to publish videos publicly (`PUBLIC_TO_EVERYONE`).

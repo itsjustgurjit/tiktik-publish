@@ -12,8 +12,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Base directory for data storage (supports persistent volumes on Render)
+const DATA_DIR = process.env.DATA_DIR || __dirname;
+
 // Ensure directories exist
-const UPLOADS_DIR = path.join(__dirname, "uploads");
+const UPLOADS_DIR = path.join(DATA_DIR, "uploads");
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
@@ -49,8 +52,8 @@ const upload = multer({
   limits: { fileSize: 500 * 1024 * 1024 }, // limit to 500MB
 });
 
-const CONFIG_FILE = path.join(__dirname, "config.json");
-const POSTS_FILE = path.join(__dirname, "posts.json");
+const CONFIG_FILE = path.join(DATA_DIR, "config.json");
+const POSTS_FILE = path.join(DATA_DIR, "posts.json");
 
 // Helper: load config
 function loadConfig() {
