@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - TokScheduler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-app: #080a0f;
+      --bg-panel: rgba(20, 25, 40, 0.65);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --color-primary: #fe2c55;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      padding: 3rem 1.5rem;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--bg-panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      padding: 3rem;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      border-bottom: 2px solid var(--color-primary);
+      padding-bottom: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    p,
+    ul {
+      margin-bottom: 1.25rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2rem;
+      color: var(--color-primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <a href="/" class="back-link">&larr; Back to Dashboard</a>
+    <h1>Privacy Policy</h1>
+    <p><strong>Effective Date:</strong> June 22, 2026</p>
+
+    <p>This Privacy Policy describes how <strong>TokScheduler</strong> ("we", "our", or "the Application") collects,
+      uses, stores, and shares information in connection with your use of our local software application and its
+      integrations, specifically the TikTok Content Posting API.</p>
+
+    <h2>1. Data Collection and Usage</h2>
+    <p>TokScheduler is a local-first software application designed to run privately on your own computer. We collect
+      only the data necessary to provide scheduling and posting functionalities:</p>
+    <ul>
+      <li><strong>TikTok Profile Data:</strong> When you connect your TikTok account via OAuth, we retrieve your user
+        ID, profile name, display handle, and profile avatar image URL. This is used solely to identify your connected
+        account and customize the dashboard interface.</li>
+      <li><strong>Media Files:</strong> We store the video files (.mp4) that you manually upload to the scheduling
+        queue. These files are stored in a local directory on your machine (`uploads/`) and are used solely to transmit
+        the content to TikTok's publishing servers.</li>
+      <li><strong>Access Credentials:</strong> The application stores OAuth access tokens and refresh tokens received
+        from TikTok. These credentials are used to sign and authenticate API requests to TikTok.</li>
+    </ul>
+
+    <h2>2. Data Storage and Retention</h2>
+    <p>All collected data is stored <strong>locally</strong> on the device where you run the application (in
+      `config.json` and `posts.json`). We do not host central servers, and your data is never sent to any
+      developer-owned or third-party servers, with the sole exception of the official TikTok API endpoints
+      (`open.tiktokapis.com` and related upload CDNs).</p>
+    <p>Media files are deleted from your local device immediately upon successful publication to TikTok or if you
+      manually delete the post from the scheduling queue.</p>
+
+    <h2>3. Data Sharing and Transfer</h2>
+    <p>We do not sell, rent, trade, or share your data. Your data is sent directly from your local computer to TikTok
+      APIs to facilitate the content scheduling and video posting features requested by you. This data transfer is
+      subject to TikTok's own Developer Policy and Terms.</p>
+
+    <h2>4. User Rights and Data Deletion</h2>
+    <p>Since your information is stored entirely on your own local storage, you have absolute control over your data.
+      You can delete all tokens, profile info, and scheduled videos at any time by:</p>
+    <ul>
+      <li>Clicking the "Disconnect Account" button in the dashboard, which immediately wipes all stored TikTok access
+        and refresh tokens.</li>
+      <li>Deleting the `config.json`, `posts.json`, and the contents of the `uploads/` folder in the application root
+        directory.</li>
+    </ul>
+
+    <h2>5. Compliance with Children's Online Privacy Protection</h2>
+    <p>The Application is not intended for use by anyone under the age of 13. We do not knowingly collect personal data
+      from children under 13.</p>
+
+    <h2>6. Contact Information</h2>
+    <p>If you have any questions or feedback regarding this Privacy Policy or data security within the Application,
+      please contact the developer via your designated platform support options.</p>
+  </div>
+</body>
+
+</html>

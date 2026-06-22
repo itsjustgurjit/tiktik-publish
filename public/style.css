@@ -200,6 +200,33 @@ body::after {
   margin-top: auto;
 }
 
+/* Sidebar Footer Compliance Links */
+.sidebar-footer {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.sidebar-footer a {
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.sidebar-footer a:hover {
+  color: var(--color-primary);
+}
+
+.sidebar-footer .bullet {
+  color: var(--text-dark);
+  user-select: none;
+}
+
 .widget-unconnected p {
   font-size: 0.75rem;
   text-transform: uppercase;

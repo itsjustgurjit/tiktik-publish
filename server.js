@@ -23,6 +23,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
+// Clean routes for TikTok Developer compliance
+app.get("/privacy", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "privacy.html"));
+});
+
+app.get("/terms", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "terms.html"));
+});
+
 // Multer storage configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
